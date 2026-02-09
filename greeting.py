@@ -12,8 +12,8 @@ def greet(name: str | None = None) -> str:
         name: Optional name to include in the greeting.
     """
     if name:
-        return f"こんにちは、{name}さん！"
-    return "こんにちは！"
+        return f"ハロー、{name}さん！"
+    return "ハロー！"
 
 
 def build_parser() -> argparse.ArgumentParser:
