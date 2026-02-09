@@ -5,6 +5,13 @@ class TodoApp:
     def __init__(self):
         self.tasks = []
         self.load_tasks()
+        self.horror_phrases = [
+            "魂を奪うタスクだ…",
+            "血の匂いがする…",
+            "呪いの始まりだ…",
+            "幽霊が囁いている…",
+            "闇が広がる…"
+        ]
 
     def load_tasks(self):
         try:
@@ -17,88 +24,87 @@ class TodoApp:
         with open('tasks.json', 'w') as f:
             json.dump(self.tasks, f, indent=4)
 
-    def add_task(self, task, priority='中'):
-        emoji = self.get_emoji(task)
-        self.tasks.append({"task": task, "completed": False, "priority": priority, "emoji": emoji})
+    def add_task(self, task):
+        # ホラー絵文字
+        emojis = ['👻', '🧛', '🧟', '🩸', '💀', '🕷️', '🦇', '🏚️']
+        emoji = random.choice(emojis)
+        # タスクをホラー風に変える
+        modifiers = ['', 'を血まみれに', 'を呪って', 'を幽霊のように', 'を闇の��で']
+        modified_task = task + random.choice(modifiers)
+        self.tasks.append({"task": modified_task, "completed": False, "emoji": emoji})
         self.save_tasks()
-        print(f"{emoji} タスク '{task}' を追加しました！ (優先度: {priority})")
+        print(f"{emoji} '{modified_task}' を追加した… {random.choice(self.horror_phrases)}")
 
     def complete_task(self, index):
         if 0 <= index < len(self.tasks):
             self.tasks[index]["completed"] = True
             self.save_tasks()
-            message = random.choice([
-                "素晴らしい！タスク完了だね！ 🎉",
-                "よくやった！次もがんばろう！ 💪",
-                "完了！君はスーパーヒーローだ！ 🦸‍♂️",
-                "お疲れ様！少し休憩しようか？ ☕"
-            ])
-            print(f"{self.tasks[index]['emoji']} タスク '{self.tasks[index]['task']}' を完了にしました。 {message}")
+            horrors = [
+                "完了…しかし魂はまだ彷徨っている… 👻",
+                "よくやった…でも次はもっと恐ろしいタスクだ… 🧛",
+                "お疲れ…血の海が広がる… 🩸",
+                "スーパー完了…だが呪いは解けない… 💀",
+                "おしまい…闇が君を包む… 🕷️"
+            ]
+            print(f"{self.tasks[index]['emoji']} '{self.tasks[index]['task']}' を完了にした… {random.choice(horrors)}")
         else:
-            print("無効なインデックスです。")
+            print("そんな番号はない… 消えたのか…")
 
     def list_tasks(self):
         if not self.tasks:
-            print("タスクがありません。新しいタスクを追加しよう！ 📝")
+            print("タスクはない… 静寂だけが残る… 👻")
         else:
-            sorted_tasks = sorted(self.tasks, key=lambda x: ['高', '中', '低'].index(x['priority']))
-            for i, task in enumerate(sorted_tasks):
-                status = "✅" if task["completed"] else "⏳"
-                pri = task.get("priority", "中")
-                emoji = task.get("emoji", "")
-                print(f"{i}: {emoji} {task['task']} [{pri}] {status}")
+            print("恐ろしいタス��リストだ…")
+            for i, task in enumerate(self.tasks):
+                status = "完了（しかし幽霊は去らない…）" if task["completed"] else "未完了… 恐怖が忍び寄る…"
+                emoji = task.get("emoji", "👻")
+                print(f"{i}: {emoji} {task['task']} - {status}")
 
     def remove_task(self, index):
         if 0 <= index < len(self.tasks):
             removed = self.tasks.pop(index)
             self.save_tasks()
-            print(f"{removed['emoji']} タスク '{removed['task']}' を削除しました。さようなら！ 👋")
+            print(f"{removed['emoji']} '{removed['task']}' を消した… {random.choice(self.horror_phrases)}")
         else:
-            print("無効なインデックスです。")
+            print("消せない… 呪われている…")
 
-    def get_emoji(self, task):
-        keywords = {
-            '仕事': '💼', '勉強': '📚', '買い物': '🛒', '運動': '🏃‍♂️',
-            '料理': '🍳', '旅行': '✈️', '会議': '📅', '読書': '📖'
-        }
-        for key, emoji in keywords.items():
-            if key in task:
-                return emoji
-        return '📌'  # デフォルト
 
 def main():
     app = TodoApp()
     while True:
-        print("\n🎯 楽しい To-Do アプリ 🎯")
-        print("1. タスクを追加 (優先度指定可能)")
-        print("2. タスクを完了")
-        print("3. タスク一覧")
-        print("4. タスクを削除")
-        print("5. 終了")
-        choice = input("選択: ")
+        print("\n👻 ホラー To-Do アプリ 👻")
+        print("1. タスクを追加（魂を賭けて…）")
+        print("2. タスクを完了（闇を呼び…）")
+        print("3. タスク一覧（恐怖のリスト）")
+        print("4. タスクを削除（永遠の別れ…）")
+        print("5. 終了（逃げられるのか…）")
+        choice = input("何をする… ?: ")
         
         if choice == "1":
-            task = input("タスクを入力: ")
-            priority = input("優先度 (高/中/低) [デフォルト: 中]: ") or '中'
-            if priority not in ['高', '中', '低']:
-                priority = '中'
-            app.add_task(task, priority)
+            task = input("タスクを入力（血��流して…）: ")
+            app.add_task(task)
         elif choice == "2":
             app.list_tasks()
-            index = int(input("完了するタスクの番号: "))
-            app.complete_task(index)
+            try:
+                index = int(input("完了する番号（幽霊の囁き…）: "))
+                app.complete_task(index)
+            except ValueError:
+                print("数字を入れろ… さもなくば呪われる…")
         elif choice == "3":
             app.list_tasks()
         elif choice == "4":
             app.list_tasks()
-            index = int(input("削除するタスクの番号: "))
-            app.remove_task(index)
+            try:
+                index = int(input("削除する番号（魂の叫び…）: "))
+                app.remove_task(index)
+            except ValueError:
+                print("数字を入れろ… さもなくば呪われる…")
         elif choice == "5":
             app.save_tasks()
-            print("またね！ 👋")
+            print("また… 会おう… 👋")
             break
         else:
-            print("無効な選択です。")
+            print("正しい番号を入れろ… 闇が迫る…")
 
 if __name__ == "__main__":
     main()
